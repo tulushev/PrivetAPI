@@ -29,6 +29,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
     + `invited` - пользователь которому мы отправили приглашение
     + `inviter` - пользователь отправивший приглашение нам
     + `appointment` - пользователь с которым у нас подтвержденная встреча
++ `appointmentId` (optional, UUID) - ID встречи
 + `photo` (dictionary) - Фото пользователя с разными размерами
     + `preview` (string) - URL квадратного фото размером 120х120
     + `previewMedium` (string) - URL квадратного фото размером 180х180
@@ -72,6 +73,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                         "name": "Валерия",
                         "birthday": "1990-5-12T00:00:00.00Z",
                         "status": "invited",
+                        "appointmentId": "7F76F4D2-06A0-11E5-82A6-01E861EA09BE",
                         "photo": {
                             "preview": "http://preview.jpg",
                             "previewMedium": "http://previewMedium.jpg",
@@ -89,6 +91,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                         "name": "Светлана",
                         "birthday": "1986-12-4T00:00:00.00Z",
                         "status": "inviter",
+                        "appointmentId": "2B64F850-06A8-11E5-879B-757BB664A5DC",
                         "photo": {
                             "preview": "http://preview.jpg",
                             "previewMedium": "http://previewMedium.jpg",
@@ -104,6 +107,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                         "name": "Мария",
                         "birthday": "1993-5-3T00:00:00.00Z",
                         "status": "appointment",
+                        "appointmentId": "63386058-06CD-11E5-AEE4-3C774B860EDE"
                         "photo": {
                             "preview": "http://preview.jpg",
                             "previewMedium": "http://previewMedium.jpg",
@@ -139,15 +143,23 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                     "name": "A",
                     "location": {
                         "latitude": 59.802800,
-                        "longitude": 30.39278
+                        "longitude": 30.39246
                     }
                 },
                 {
                     "placeId": "90E0E65E-069D-11E5-8882-757BB664A5DC",
                     "name": "B",
                     "location": {
-                        "latitude": 59.802800,
-                        "longitude": 30.39278
+                        "latitude": 59.801850,
+                        "longitude": 30.39274
+                    }
+                },
+                {
+                    "placeId": "167C6846-06D1-11E5-AE66-BABBDD9DA696",
+                    "name": "C",
+                    "location": {
+                        "latitude": 59.832842,
+                        "longitude": 30.32237
                     }
                 }
             ],
@@ -164,9 +176,42 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 
 Группа методов для функционала «Давай встретимся»
 
-## Make an appointment [POST]
+## Get all appointments [GET]
 
 + Request
+
+        {
+            "sessionId": "653527D9-D4E8-43D7-A8C1-5B28C04AD17B"
+        }
+
++ Response 200 (application/json)
+
+        {
+            "appointments": [
+                {
+                    "appointmentId": "63386058-06CD-11E5-AEE4-3C774B860EDE",
+                    "status": "accepted",
+                    "userId": "7405130E-069B-11E5-8882-757BB664A5DC",
+                    "placeId": "167C6846-06D1-11E5-AE66-BABBDD9DA696"
+                },
+                {
+                    "appointmentId": "7F76F4D2-06A0-11E5-82A6-01E861EA09BE",
+                    "status": "made",
+                    "userId": "463EC690-069B-11E5-88C0-757BB664A5DC",
+                    "placeId": "90E0E65E-069D-11E5-8882-757BB664A5DC"
+                },
+                {
+                    "appointmentId": "2B64F850-06A8-11E5-879B-757BB664A5DC",
+                    "status": "accepted",
+                    "userId": "5864AAC4-069B-11E5-9941-757BB664A5DC",
+                    "placeId": "544B3FD2-06C5-11E5-9762-D634EB8A2689"
+                }
+            ]
+        }
+
+## Make an appointment [POST]
+
++ Request (application/json)
 
         {
             "sessionId": "653527D9-D4E8-43D7-A8C1-5B28C04AD17B",
@@ -180,29 +225,8 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
             "appointment": {
                 "appointmentId": "7F76F4D2-06A0-11E5-82A6-01E861EA09BE",
                 "status": "made",
-                "target": {
-                    "userId": "463EC690-069B-11E5-88C0-757BB664A5DC",
-                    "name": "Валерия",
-                    "birthday": "1990-5-12T00:00:00.00Z",
-                    "status": "invited",
-                    "photo": {
-                        "preview": "http://preview.jpg",
-                        "previewMedium": "http://previewMedium.jpg",
-                        "previewLarge": "http://previewLarge.jpg"
-                    },
-                    "location": {
-                        "latitude": 59.842806,
-                        "longitude": 30.41288
-                    }
-                },
-                "place": {
-                    "placeId": "90E0E65E-069D-11E5-8882-757BB664A5DC",
-                    "name": "B",
-                    "location": {
-                        "latitude": 59.802800,
-                        "longitude": 30.39278
-                    }
-                }
+                "userId": "463EC690-069B-11E5-88C0-757BB664A5DC",
+                "placeId": "90E0E65E-069D-11E5-8882-757BB664A5DC"
             }
         }
 
@@ -231,29 +255,8 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
             "appointment": {
                 "appointmentId": "2B64F850-06A8-11E5-879B-757BB664A5DC",
                 "status": "accepted",
-                "target": {
-                    "userId": "5864AAC4-069B-11E5-9941-757BB664A5DC",
-                    "name": "Светлана",
-                    "birthday": "1986-12-4T00:00:00.00Z",
-                    "status": "appointment",
-                    "photo": {
-                        "preview": "http://preview.jpg",
-                        "previewMedium": "http://previewMedium.jpg",
-                        "previewLarge": "http://previewLarge.jpg"
-                    },
-                    "location": {
-                        "latitude": 59.872806,
-                        "longitude": 30.43288
-                    }
-                },
-                "place": {
-                    "placeId": "544B3FD2-06C5-11E5-9762-D634EB8A2689",
-                    "name": "A",
-                    "location": {
-                        "latitude": 59.802800,
-                        "longitude": 30.39278
-                    }
-                }
+                "userId": "5864AAC4-069B-11E5-9941-757BB664A5DC",
+                "placeId": "544B3FD2-06C5-11E5-9762-D634EB8A2689"
             }
         }
 
