@@ -37,7 +37,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
     + `latitude` (float) - Широта
     + `longitude` (float) - Долгота
 
-+ Request (application/json)
++ Request
 
         {
             "sessionId": "653527D9-D4E8-43D7-A8C1-5B28C04AD17B",
@@ -124,7 +124,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 
 ## Places [GET]
 
-+ Request (application/json)
++ Request
 
         {
             "sessionId": "653527D9-D4E8-43D7-A8C1-5B28C04AD17B"
@@ -166,7 +166,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 
 ## Make an appointment [POST]
 
-+ Request (application/json)
++ Request
 
         {
             "sessionId": "653527D9-D4E8-43D7-A8C1-5B28C04AD17B",
@@ -217,7 +217,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 
 ## Change appointment status [PUT]
 
-+ Request (application/json)
++ Request
 
         {
             "sessionId": "653527D9-D4E8-43D7-A8C1-5B28C04AD17B",
@@ -256,3 +256,15 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                 }
             }
         }
+
+## Break an appointment [DELETE]
+
++ Request
+
+        {
+            "sessionId": "653527D9-D4E8-43D7-A8C1-5B28C04AD17B",
+            "appointmentId": "2B64F850-06A8-11E5-879B-757BB664A5DC"
+        }
+        
++ Response 204
+
