@@ -3,27 +3,32 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 
 # PrivetAR
 
-# Nearby API [/users/nearby/]
+# Radar [/targets]
 
 Метод отдает запрашиваемое количество людей в радиусе 360 градусов с равномерным распределением по градусам, и запасом для обновления.
 
 При старте приложение делает запрос на этот метод. Последующие запросы делаются при нажатии на кнопку обновления.
 
-## Пользователи рядом [POST]
+## Targets [GET]
 
 Параметры запроса:
-+ `sessionId` : `653527d9-d4e8-43d7-a8c1-5b28c04ad17b` (required, UUID) - ID сессии
++ `sessionId` : `653527D9-D4E8-43D7-A8C1-5B28C04AD17B` (required, UUID) - ID сессии
 + `usersInBatch`: 40 (required, number) - Количество пользователей на 360 градусов
 + `batches`: 2 (required, number) - Количество выборок.
 Если количество пользователей 40 а batches = 2 то прийдет 2 массива по 40 пользователей
 + `currentLatitude`: 59.852806 (float) - Текущие координаты широты
 + `currentLongitude`: 30.42288 (float) - Текущие координаты долготы
 
-В ответ приходит массив массивов объекта `nearby`. Количество вложенных массивов зависит от параметра `batches`.
-Объект `nearby` имеет такие поля:
+В ответ приходит массив массивов объекта `target`. Количество вложенных массивов зависит от параметра `batches`.
+Объект `target` имеет такие поля:
 + `userId` (UUID) - Идентификатор пользователя
 + `name` (string) - Имя пользователя
 + `birthday` (string) - День рождения пользователя в формате RFC 3339 ISO 8601
++ `ststus` (string) - Статус пользователя
+    + `normal` - обычный пользователь
+    + `invited` - пользователь которому мы отправили приглашение
+    + `inviter` - пользователь отправивший приглашение нам
+    + `appointment` - пользователь с которым у нас подтвержденная встреча
 + `photo` (dictionary) - Фото пользователя с разными размерами
     + `preview` (string) - URL квадратного фото размером 120х120
     + `previewMedium` (string) - URL квадратного фото размером 180х180
@@ -35,7 +40,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 + Request (application/json)
 
         {
-            "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b",
+            "sessionId": "653527D9-D4E8-43D7-A8C1-5B28C04AD17B",
             "usersInBatch": 2,
             "batches": 2,
             "currentLatitude": 59.852806,
@@ -45,15 +50,17 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 + Response 200 (application/json)
 
         {
-            "nearby": [
+            "targets": [
                 [
                     {
+                        "userId": "2A4B2528-069B-11E5-879B-757BB664A5DC",
                         "name": "Кристина",
                         "birthday": "1989-3-3T00:00:00.00Z",
+                        "status": "normal",
                         "photo": {
-                            "preview": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
-                            "previewMedium": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
-                            "previewLarge": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg"
+                            "preview": "http://preview.jpg",
+                            "previewMedium": "http://previewMedium.jpg",
+                            "previewLarge": "http://previewLarge.jpg"
                         },
                         "location": {
                             "latitude": 59.882806,
@@ -61,12 +68,14 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                         }
                     },
                     {
+                        "userId": "463EC690-069B-11E5-88C0-757BB664A5DC",
                         "name": "Валерия",
                         "birthday": "1990-5-12T00:00:00.00Z",
+                        "status": "invited",
                         "photo": {
-                            "preview": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
-                            "previewMedium": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
-                            "previewLarge": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg"
+                            "preview": "http://preview.jpg",
+                            "previewMedium": "http://previewMedium.jpg",
+                            "previewLarge": "http://previewLarge.jpg"
                         },
                         "location": {
                             "latitude": 59.842806,
@@ -76,12 +85,14 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                 ],
                 [
                     {
+                        "userId": "5864AAC4-069B-11E5-9941-757BB664A5DC",
                         "name": "Светлана",
                         "birthday": "1986-12-4T00:00:00.00Z",
+                        "status": "inviter",
                         "photo": {
-                            "preview": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
-                            "previewMedium": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
-                            "previewLarge": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg"
+                            "preview": "http://preview.jpg",
+                            "previewMedium": "http://previewMedium.jpg",
+                            "previewLarge": "http://previewLarge.jpg"
                         },
                         "location": {
                             "latitude": 59.872806,
@@ -89,12 +100,14 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                         }
                     },
                     {
+                        "userId": "7405130E-069B-11E5-8882-757BB664A5DC",
                         "name": "Мария",
                         "birthday": "1993-5-3T00:00:00.00Z",
+                        "status": "appointment",
                         "photo": {
-                            "preview": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
-                            "previewMedium": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
-                            "previewLarge": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg"
+                            "preview": "http://preview.jpg",
+                            "previewMedium": "http://previewMedium.jpg",
+                            "previewLarge": "http://previewLarge.jpg"
                         },
                         "location": {
                             "latitude": 59.892806,
