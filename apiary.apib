@@ -1,0 +1,107 @@
+FORMAT: 1A
+HOST: https://dev.api.privetapp.ru/ar/v1/
+
+# PrivetAR
+
+# Nearby API [/users/nearby/]
+
+Метод отдает запрашиваемое количество людей в радиусе 360 градусов с равномерным распределением по градусам, и запасом для обновления.
+
+При старте приложение делает запрос на этот метод. Последующие запросы делаются при нажатии на кнопку обновления.
+
+## Пользователи рядом [POST]
+
+Параметры запроса:
++ `sessionId` : `653527d9-d4e8-43d7-a8c1-5b28c04ad17b` (required, UUID) - ID сессии
++ `usersInBatch`: 40 (required, number) - Количество пользователей на 360 градусов
++ `batches`: 2 (required, number) - Количество выборок.
+Если количество пользователей 40 а batches = 2 то прийдет 2 массива по 40 пользователей
++ `currentLatitude`: 59.852806 (float) - Текущие координаты широты
++ `currentLongitude`: 30.42288 (float) - Текущие координаты долготы
+
+В ответ приходит массив массивов объекта `nearby`. Количество вложенных массивов зависит от параметра `batches`.
+Объект `nearby` имеет такие поля:
++ `userId` (UUID) - Идентификатор пользователя
++ `name` (string) - Имя пользователя
++ `birthday` (string) - День рождения пользователя в формате RFC 3339 ISO 8601
++ `photo` (dictionary) - Фото пользователя с разными размерами
+    + `preview` (string) - URL квадратного фото размером 120х120
+    + `previewMedium` (string) - URL квадратного фото размером 180х180
+    + `previewLarge` (string) - URL квадратного фото размером 240х240
++ `location` (dictionary) - Месторасположение пользователя
+    + `latitude` (float) - Широта
+    + `longitude` (float) - Долгота
+
++ Request (application/json)
+
+        {
+            "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b",
+            "usersInBatch": 2,
+            "batches": 2,
+            "currentLatitude": 59.852806,
+            "currentLongitude": 30.42288
+        }
+
++ Response 200 (application/json)
+
+        {
+            "nearby": [
+                [
+                    {
+                        "name": "Кристина",
+                        "birthday": "1989-3-3T00:00:00.00Z",
+                        "photo": {
+                            "preview": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
+                            "previewMedium": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
+                            "previewLarge": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg"
+                        },
+                        "location": {
+                            "latitude": 59.882806,
+                            "longitude": 30.45288
+                        }
+                    },
+                    {
+                        "name": "Валерия",
+                        "birthday": "1990-5-12T00:00:00.00Z",
+                        "photo": {
+                            "preview": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
+                            "previewMedium": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
+                            "previewLarge": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg"
+                        },
+                        "location": {
+                            "latitude": 59.842806,
+                            "longitude": 30.41288
+                        }
+                    }
+                ],
+                [
+                    {
+                        "name": "Светлана",
+                        "birthday": "1986-12-4T00:00:00.00Z",
+                        "photo": {
+                            "preview": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
+                            "previewMedium": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
+                            "previewLarge": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg"
+                        },
+                        "location": {
+                            "latitude": 59.872806,
+                            "longitude": 30.43288
+                        }
+                    },
+                    {
+                        "name": "Мария",
+                        "birthday": "1993-5-3T00:00:00.00Z",
+                        "photo": {
+                            "preview": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
+                            "previewMedium": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg",
+                            "previewLarge": "http://130322.selcdn.ru/photos/24/1a/241a1794-8b08-41ed-8929-93a9ea3759a9_l.jpg"
+                        },
+                        "location": {
+                            "latitude": 59.892806,
+                            "longitude": 30.45288
+                        }
+                    }
+                ]
+            ]
+        }
+
