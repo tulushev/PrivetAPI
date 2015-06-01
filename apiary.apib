@@ -548,13 +548,50 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 
 Метод получения мест встречи
 
-### Places [GET]
+### Параметры запроса
+
+В запросе нет специфических параметров кроме сессии
+
+|                  |                Пример                |    Тип     |Обязательный|               Описание               |
+|------------------|:-------------------------------------|------------|:----------:|--------------------------------------|
+|   *sessionId*    |"653527d9-d4e8-43d7-a8c1-5b28c04ad17b"|   `UUID`   |   **+**    |              ID сессии               |
+
+
+#### Places [GET]
 
 + Request
 
-        {
-            "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b"
-        }
+    + Attributes
+    
+        + sessionId: `653527d9-d4e8-43d7-a8c1-5b28c04ad17b` (string, required) - ID сессии
+
+    + Body
+
+            {
+                "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b"
+            }
+            
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "definitions": {
+                    "UUID": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    }
+                },
+                "type": "object",
+                "properties": {
+                    "sessionId": {
+                        "$ref": "#/definitions/UUID"
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "sessionId"
+                ]
+            }
 
 + Response 200 (application/json)
 
