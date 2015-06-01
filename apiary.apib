@@ -366,7 +366,15 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 
     + userId: `7405130e-069b-11e5-8882-757bb664a5dc` (string, required) - Идентификатор пользователя
 
-+ Model (application/json)
+#### Specific target [GET]
+
++ Request
+
+        {
+            "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b"
+        }
+
++ Response 200 (application/json)
 
     + Body
 
@@ -473,20 +481,6 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                 "additionalProperties": false,
                 "required": [ "target" ]
             }
-
-
-
-#### Specific target [GET]
-
-+ Request
-
-        {
-            "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b"
-        }
-
-+ Response 200
-
-    [Target][]
 
 
 # Group Places
