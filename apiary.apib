@@ -48,15 +48,15 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 ## Время
 Везде где передается время — формат **ISO 8601 date-time** `YYYY-MM-DDTHH:MM:SSZ`.
 
-# Group Radar
+# Group Радар
 
 Группа методов оперирущих пользователями на радаре
 
-## Targets [/targets]
+## Пользователи [/targets]
 
 Методы оперирующие на коллекции объектов `target`
 
-### Targets [GET]
+### Все пользователи [GET]
 
 Метод отдает запрашиваемое количество людей в радиусе 360 градусов с равномерным распределением по градусам, и запасом для обновления.
 
@@ -363,7 +363,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
             }
 
 
-## Target ID [/targets/{userId}]
+## Конкретный пользователь [/targets/{userId}]
 
 Методы оперирующие с ID конкретного объекта `target`
 
@@ -371,7 +371,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 
     + userId: `7405130e-069b-11e5-8882-757bb664a5dc` (string, required) - Идентификатор пользователя
 
-#### Specific target [GET]
+#### Конкретный пользователь [GET]
 
 Возвращает конкретный объект `target` по указанному в URL `userId`
 
@@ -551,15 +551,15 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
             }
 
 
-# Group Places
+# Group Места встречи
 
 Группа методов оперирующих местами встречи
 
-## Places [/places]
+## Места встречи [/places]
 
 Методы оперирующие на коллекции объектов `places`
 
-### Places [GET]
+### Все места встреч [GET]
 
 Метод получения мест встречи
 
@@ -769,15 +769,17 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                 ]
             }
 
-# Group Appointments
+# Group Давай встретимся
 
 Группа методов для функционала «Давай встретимся»
 
-## Appointments [/appointments]
+## Встречи [/appointments]
 
 Методы оперирующие на коллекции объектов `appointment`
 
-### Get all appointments [GET]
+### Все встречи [GET]
+
+Возвращает все встречи связанные с пользователем
 
 #### Параметры запроса
 
@@ -832,7 +834,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
             ]
         }
 
-### Make an appointment [POST]
+### Назначить встречу [POST]
 
 Создает новую встречу с конкретным пользователем и местом встречи
 
@@ -888,7 +890,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
         }
 
 
-## Appointment ID [/appointments/{appointmentId}]
+## Конкретная встреча [/appointments/{appointmentId}]
 
 Методы оперирующие с ID конкретного объекта `appointment`
 
@@ -896,7 +898,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 
     + appointmentId (UUID) - ID нужной встречи
 
-### Get specific appointment [GET]
+### Конкретная встреча [GET]
 
 Возвращает конкретный объект `appointment` по указанному в URL `appointmentId`
 
@@ -970,7 +972,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
             }
         }
 
-### Change appointment status [PUT]
+### Изменить статус встречи [PUT]
 
 Позволяет изменить статус встречи с `made` на `accepted` или `kept`
 
@@ -1019,7 +1021,23 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
             }
         }
 
-### Break an appointment [DELETE]
+### Отменить встречу [DELETE]
+
+Позволяет отменить встречу, что изменит ее статус на `broken`
+
+#### Параметры запроса
+
+В URL запроса указывается `appointmentId` необходимого объекта `appointment`
+
+В теле запроса передается только сессия
+
+|                  |                Пример                |    Тип     |Обязательный|               Описание               |
+|------------------|:-------------------------------------|------------|:----------:|--------------------------------------|
+|   *sessionId*    |"653527d9-d4e8-43d7-a8c1-5b28c04ad17b"|   `UUID`   |   **+**    |              ID сессии               |
+
+#### Параметры ответа
+
+В ответ приходит статус `204` сигнализирующий об успешной отмене встречи
 
 + Request
 
