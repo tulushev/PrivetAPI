@@ -663,10 +663,6 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                         "type": "string",
                         "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
                     },
-                    "natural": {
-                        "type": "integer",
-                        "minimum": 1
-                    },
                     "latitude": {
                         "type": "number",
                         "minimum": -90,
@@ -767,7 +763,31 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 
 Группа методов для функционала «Давай встретимся»
 
-### Get all appointments [GET]
+### Параметры запроса
+
+В запросе нет специфических параметров кроме сессии
+
+|                  |                Пример                |    Тип     |Обязательный|               Описание               |
+|------------------|:-------------------------------------|------------|:----------:|--------------------------------------|
+|   *sessionId*    |"653527d9-d4e8-43d7-a8c1-5b28c04ad17b"|   `UUID`   |   **+**    |              ID сессии               |
+
+### Параметры ответа
+
+|                  |                  |                 |                Пример                |    Тип     |Обязательный|               Описание               |
+|------------------|------------------|-----------------|:-------------------------------------|------------|:----------:|--------------------------------------|
+| **appointments** |                  |                 |                                      | `[object]` |   **+**    |  Массив объектов типа `appointment`  |
+|                  | *appointmentId*  |                 |"544b3fd2-06c5-11e5-9762-d634eb8a2689"|   `UUID`   |   **+**    |              ID встречи              |
+|                  |     *status*     |                 |"made"                                |  `string`  |   **+**    |            Статус встречи            |
+|                  |                  |     `made`      |                                      |            |            |          Встреча назначена           |
+|                  |                  |   `accepted`    |                                      |            |            |         Встреча подтверждена         |
+|                  |                  |    `broken`     |                                      |            |            |        От встречи отказались         |
+|                  |                  |     `kept`      |                                      |            |            |           «Мы встретились»           |
+|                  |     *userId*     |                 |"7405130e-069b-11e5-8882-757bb664a5dc"|   `UUID`   |   **+**    |           ID пользователя            |
+|                  |    *placeId*     |                 |"167c6846-06d1-11e5-ae66-babbdd9da696"|   `UUID`   |   **+**    |           ID места встречи           |
+
+
+
+#### Get all appointments [GET]
 
 + Request
 
@@ -800,7 +820,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
             ]
         }
 
-### Get specific appointment [GET /appointments/{appointmentId}]
+#### Get specific appointment [GET /appointments/{appointmentId}]
 
 + Parameters
     + appointmentId (UUID) - ID нужной встречи
@@ -822,7 +842,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
             }
         }
 
-### Make an appointment [POST]
+#### Make an appointment [POST]
 
 + Request (application/json)
 
@@ -852,7 +872,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
             }
         }
 
-### Change appointment status [PUT]
+#### Change appointment status [PUT]
 
 + Request
 
@@ -873,7 +893,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
             }
         }
 
-### Break an appointment [DELETE]
+#### Break an appointment [DELETE]
 
 + Request
 
