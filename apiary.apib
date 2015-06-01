@@ -88,21 +88,80 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 |                  |                  |    *latitude*    |59.852806                             |   `frac`   |   **+**    |Широта                                             |
 |                  |                  |   *longitude*    |30.422884                             |   `frac`   |   **+**    |Долгота                                            |
 
-+ Attributes
-
-    sessionId: `653527d9-d4e8-43d7-a8c1-5b28c04ad17b` (string, required) - ID сессии
-
 #### Targets [GET]
 
 + Request
 
-        {
-            "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b",
-            "usersInBatch": 2,
-            "batches": 2,
-            "currentLatitude": 59.852806,
-            "currentLongitude": 30.42288
-        }
+    + Attributes
+
+        + sessionId: `653527d9-d4e8-43d7-a8c1-5b28c04ad17b` (string, required) - ID сессии
+        + usersInBatch: `40` (number, required) - Количество пользователей на 360
+        + batches: `2` (number, required) - Количество массивов массивов
+        + currentLatitude: `59.852806` (number, required) - Текущая широта
+        + currentLongitude: `30.422884` (number, required) - Текущая долгота
+    
+    + Body
+
+            {
+                "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b",
+                "usersInBatch": 2,
+                "batches": 2,
+                "currentLatitude": 59.852806,
+                "currentLongitude": 30.42288
+            }
+
+    + Schema
+    
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "definitions": {
+                    "UUID": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+                    },
+                    "natural": {
+                        "type": "integer",
+                        "minimum": 1
+                    },
+                    "latitude": {
+                        "type": "number",
+                        "minimum": -90,
+                        "maximum": 90
+                    },
+                    "longitude": {
+                        "type": "number",
+                        "minimum": -180,
+                        "maximum": 180
+                    }
+                },
+                "type": "object",
+                "properties": {
+                    "sessionId": {
+                        "$ref": "#/definitions/UUID"
+                    },
+                    "usersInBatch": {
+                        "$ref": "#/definitions/natural"
+                    },
+                    "batches": {
+                        "$ref": "#/definitions/natural"
+                    },
+                    "currentLatitude": {
+                        "$ref": "#/definitions/latitude"
+                    },
+                    "currentLongitude": {
+                        "$ref": "#/definitions/longitude"
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "sessionId",
+                    "usersInBatch",
+                    "batches",
+                    "currentLatitude",
+                    "currentLongitude"
+                ]
+            }
+
 
 + Response 200 (application/json)
 
