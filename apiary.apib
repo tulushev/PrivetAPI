@@ -109,7 +109,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 
 В ответ приходит массив массивов объекта `target`, с максимально заполненными по параметру `batches` и `usersInBatch` массивами кроме последнего, в котором содержатся оставшиеся объекты
 
-Если не пользователей не хватает на целый массив `batches`, то он опускается
+Если пользователей не хватает на целый массив `batches`, то он опускается
 
 ##### `401 Unauthorized` Сессия недействительна
 
@@ -643,7 +643,6 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                 ]
             }
 
-
 ## Конкретный пользователь [/targets/{userId}]
 
 Методы оперирующие с ID конкретного объекта `target`
@@ -652,11 +651,11 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 
     + userId: `7405130e-069b-11e5-8882-757bb664a5dc` (string, required) - Идентификатор пользователя
 
-#### Конкретный пользователь [GET]
+### Конкретный пользователь [GET]
 
 Возвращает конкретный объект `target` по указанному в URL `userId`
 
-### Параметры запроса
+#### Параметры запроса
 
 В URL запроса указывается `userId` необходимого объекта `target`
 
@@ -666,7 +665,9 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 |------------------|:-------------------------------------|------------|:----------:|--------------------------------------|
 |   *sessionId*    |"653527d9-d4e8-43d7-a8c1-5b28c04ad17b"|   `UUID`   |   **+**    |              ID сессии               |
 
-### Параметры ответа
+#### Параметры ответа
+
+##### `200 Success` Пользователь найден
 
 В ответ приходит один объект `target` выбранного пользователя
 
@@ -688,6 +689,20 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 |   **location**   |                  |                                      |  `object`  |   **+**    |Месторасположение пользователя                     |
 |                  |    *latitude*    |59.852806                             |   `frac`   |   **+**    |Широта                                             |
 |                  |   *longitude*    |30.422884                             |   `frac`   |   **+**    |Долгота                                            |
+
+##### `401 Unauthorized` Сессия недействительна
+
+В ответе содержится объект `error` с копирайтами для пользователя
+
+Необходимо разлогиниться
+
+##### `404 Not Found` Пользователь с таким ID не найден
+
+Тело ответа пустое
+
+##### `500 Internal Server Error` Ошибка сервера
+
+В ответе содержится объект `error` с копирайтом ошибки для пользователя
 
 + Request
 
@@ -848,7 +863,85 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                 ]
             }
 
++ Response 401 (application/json)
 
+    + Body
+
+            {
+                "error": {
+                    "message": "Ваша сессия истекла",
+                    "description": "Войдите в приложение заново"
+                }
+            }
+
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "message"
+                        ]
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "error"
+                ]
+            }
+
++ Response 404
+
++ Response 500 (application/json)
+
+    + Body
+
+            {
+                "error": {
+                    "message": "Произошла ошибка",
+                    "description": "Попробуйте снова"
+                }
+            }
+
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "message"
+                        ]
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "error"
+                ]
+            }
 
 # Group Места встречи
 
