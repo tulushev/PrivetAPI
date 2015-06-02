@@ -28,6 +28,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 - **304 Not Modified** — Неуспешная операция PUT
 
 ### Ошибка клиента
+- **400 Bad Request** — Неверные параметры запроса, с их описанием в объекте `error`>`parameters`
 - **401 Unauthorized** — Сессия устарела, необходимо разлогиниться
 - **403 Forbidden** — Запрещено делать запрос в данный момент, например попытка назначить встречу при уже активной
 - **404 Not Found** — Ресурс не найден, при обращении клиента к несуществующему адресу ресурса, например попытка получить по ID уже удаленную встречу
@@ -40,11 +41,14 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 ## Ошибки
 Ошибки отправляются на любой не `2xx` код состояния с объектом `error` в теле ответа
 
-|         |             |                Пример                |    Тип     |Обязательный|               Описание               |
-|---------|-------------|:-------------------------------------|------------|:----------:|--------------------------------------|
-|**error**|             |                                      |            |   **+**    |      Объект ошибки с описанием       |
-|         |  *message*  |"Вы не можете назначить новую встречу"|  `string`  |   **+**    |          Короткий копирайт           |
-|         |*description*|"Отмените предыдущую встречу"         |  `string`  |   **-**    |         Развернутый копирайт         |
+|              |             |                Пример                |    Тип     |Обязательный|               Описание               |
+|--------------|-------------|:-------------------------------------|------------|:----------:|--------------------------------------|
+|              |             |                                      |            |   **+**    |      Объект ошибки с описанием       |
+|  *message*   |             |"Вы не можете назначить новую встречу"|  `string`  |   **+**    |          Короткий копирайт           |
+|*description* |             |"Отмените предыдущую встречу"         |  `string`  |   **-**    |         Развернутый копирайт         |
+|**parameters**|             |                                      |  `object`  |   **-**    |  Для отладки неправильных запросов   |
+|              |    *key*    |"batches"                             |  `string`  |   **+**    | Неверный или отсутствующий параметр  |
+|              |*description*|"Не может быть == 0"                  |  `string`  |   **-**    |     Опциональное описание ошибки     |
 
 ## Время
 Везде где передается время — формат **ISO 8601 date-time** `YYYY-MM-DDTHH:MM:SSZ`.
@@ -110,6 +114,10 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 В ответ приходит массив массивов объекта `target`, с максимально заполненными по параметру `batches` и `usersInBatch` массивами кроме последнего, в котором содержатся оставшиеся объекты
 
 Если пользователей не хватает на целый массив `batches`, то он опускается
+
+##### `400 Bad Request` Неверные параметры запроса
+
+В ответе содержится объект `error` с вложенным объектом `parameters`
 
 ##### `401 Unauthorized` Сессия недействительна
 
@@ -563,6 +571,62 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                 ]
             }
 
++ Response 400 (application/json)
+
+    + Body
+
+            {
+                "error": {
+                    "message": "Неверные поля запроса",
+                    "parameters": {
+                        "key": "sessionId",
+                        "description": "Данные не соответствует формату UUID"
+                    }
+                }
+            }
+
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "parameters": {
+                                "type": "object",
+                                "properties": {
+                                    "key": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [
+                                    "key"
+                                ]
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "message"
+                        ]
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "error"
+                ]
+            }
 
 + Response 401 (application/json)
 
@@ -689,6 +753,10 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 |   **location**   |                  |                                      |  `object`  |   **+**    |Месторасположение пользователя                     |
 |                  |    *latitude*    |59.852806                             |   `frac`   |   **+**    |Широта                                             |
 |                  |   *longitude*    |30.422884                             |   `frac`   |   **+**    |Долгота                                            |
+
+##### `400 Bad Request` Неверные параметры запроса
+
+В ответе содержится объект `error` с вложенным объектом `parameters`
 
 ##### `401 Unauthorized` Сессия недействительна
 
@@ -860,6 +928,63 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                 "additionalProperties": false,
                 "required": [
                     "target"
+                ]
+            }
+
++ Response 400 (application/json)
+
+    + Body
+
+            {
+                "error": {
+                    "message": "Неверные поля запроса",
+                    "parameters": {
+                        "key": "sessionId",
+                        "description": "Данные не соответствует формату UUID"
+                    }
+                }
+            }
+
+    + Schema
+
+            {
+                "$schema": "http://json-schema.org/draft-04/schema#",
+                "type": "object",
+                "properties": {
+                    "error": {
+                        "type": "object",
+                        "properties": {
+                            "message": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            },
+                            "parameters": {
+                                "type": "object",
+                                "properties": {
+                                    "key": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    }
+                                },
+                                "additionalProperties": false,
+                                "required": [
+                                    "key"
+                                ]
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "message"
+                        ]
+                    }
+                },
+                "additionalProperties": false,
+                "required": [
+                    "error"
                 ]
             }
 
