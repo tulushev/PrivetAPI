@@ -1090,32 +1090,36 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 
 #### Параметры ответа
 
-##### Места встречи заданы
+##### `200 Success`
 
-![Map](https://dl.dropboxusercontent.com/s/fpnj7eygi5i1icc/Map_annotated.png)
+![Map](https://dl.dropboxusercontent.com/s/wm83kk2t8cw3puz/Map_annotated.gif)
 
-Получение масштаба отвязано от модели телефона, и определяется двумя параметрами, диаметром карты по меньшей стороне и ее центром.
-Все телефоны таким образом будут отличаться своей большей стороной, координаты которой высчитаются из диаметра и аспект рейта телефона
+Привязка координат карты определяется двумя параметрами, координатами левого верхнего угла `NW` и координатами правого нижнего угла `SE`
 
-|                  |                  |                  |                Пример                |    Тип     |Обязательный|               Описание               |
-|------------------|------------------|------------------|:-------------------------------------|------------|:----------:|--------------------------------------|
-|    **places**    |                  |                  |                                      | `[object]` |   **+**    |     Массив объектов типа `place`     |
-|                  |    *placeId*     |                  |"544b3fd2-06c5-11e5-9762-d634eb8a2689"|   `UUID`   |   **+**    |           ID места встречи           |
-|                  |      *name*      |                  |"A"                                   |  `string`  |   **+**    |        Название места встречи        |
-|                  |   **location**   |                  |                                      |  `object`  |   **+**    |      Месторасположение встречи       |
-|                  |                  |    *latitude*    |59.802800                             |   `frac`   |   **+**    |                Широта                |
-|                  |                  |   *longitude*    |30.39246                              |   `frac`   |   **+**    |               Долгота                |
-|    **scale**     |                  |                  |                                      |  `object`  |   **+**    |      Масштаб карты пользователя      |
-|                  |    *diameter*    |                  |3548.02                               |   `frac`   |   **+**    |           Диаметр в метрах           |
-|                  |    **center**    |                  |                                      |  `object`  |   **+**    |       Координаты центра карты        |
-|                  |                  |    *latitude*    |59.802800                             |   `frac`   |   **+**    |                Широта                |
-|                  |                  |   *longitude*    |30.39278                              |   `frac`   |   **+**    |               Долгота                |
+Для простоты расчетов, верх на изображении карты ориентирован точно на север 
 
-##### `204 No Content` Места встречи не заданы
+![Limits](https://dl.dropboxusercontent.com/s/fh2ugvw9tntcofy/Limits_annotated.jpg)
 
-В ответе отсутствует `body`, только статусный код `204`
+Объект `limits` содержит минимальное и максимальное расстояние для выборки пользователей, эти данные показываются на радаре возле линий расстояния, как на изображении выше
 
-Невозможно назначать встречи
+|                  |                  |                  |                Пример                |    Тип     |Обязательный|                  Описание                  |
+|------------------|------------------|------------------|:-------------------------------------|------------|:----------:|--------------------------------------------|
+|    **places**    |                  |                  |                                      | `[object]` |   **+**    |Массив объектов типа `place`                |
+|                  |    *placeId*     |                  |"544b3fd2-06c5-11e5-9762-d634eb8a2689"|   `UUID`   |   **+**    |ID места встречи                            |
+|                  |      *name*      |                  |"A"                                   |  `string`  |   **+**    |Название места встречи                      |
+|                  |   **location**   |                  |                                      |  `object`  |   **+**    |Месторасположение встречи                   |
+|                  |                  |    *latitude*    |59.802800                             |   `frac`   |   **+**    |Широта                                      |
+|                  |                  |   *longitude*    |30.39246                              |   `frac`   |   **+**    |Долгота                                     |
+|     **map**      |                  |                  |                                      |  `object`  |   **+**    |Размер карты пользователя                   |
+|                  |      **NW**      |                  |                                      |  `object`  |   **+**    |Координаты левой верхней точки карты        |
+|                  |                  |    *latitude*    |60.008681                             |   `frac`   |   **+**    |Широта                                      |
+|                  |                  |   *longitude*    |30.224482                             |   `frac`   |   **+**    |Долгота                                     |
+|                  |      **SE**      |                  |                                      |  `object`  |   **+**    |Координаты правой нижней точки карты        |
+|                  |                  |    *latitude*    |59.858692                             |   `frac`   |   **+**    |Широта                                      |
+|                  |                  |   *longitude*    |30.485407                             |   `frac`   |   **+**    |Долгота                                     |
+|    **limits**    |                  |                  |                                      |  `object`  |   **+**    |Пределы расстояний для выборки пользователей|
+|                  |      *min*       |                  |100                                   |  `number`  |   **+**    |Минимум. Метры. Целое число                 |
+|                  |      *max*       |                  |500                                   |  `number`  |   **+**    |Максимум. Метры. Целое число, > `min`       |
 
 ##### `400 Bad Request` Неверные параметры запроса
 
@@ -1175,7 +1179,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                         "placeId": "544b3fd2-06c5-11e5-9762-d634eb8a2689",
                         "name": "A",
                         "location": {
-                            "latitude": 59.802800,
+                            "latitude": 59.8028,
                             "longitude": 30.39246
                         }
                     },
@@ -1183,7 +1187,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                         "placeId": "90e0e65e-069d-11e5-8882-757bb664a5dc",
                         "name": "B",
                         "location": {
-                            "latitude": 59.801850,
+                            "latitude": 59.80185,
                             "longitude": 30.39274
                         }
                     },
@@ -1196,12 +1200,19 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                         }
                     }
                 ],
-                "scale": {
-                    "diameter": 3548.02,
-                    "center": {
-                        "latitude": 59.802800,
-                        "longitude": 30.39278
+                "map": {
+                    "NW": {
+                        "latitude": 60.008681,
+                        "longitude": 30.224482
+                    },
+                    "SE": {
+                        "latitude": 59.858692,
+                        "longitude": 30.485407
                     }
+                },
+                "limits": {
+                    "min": 100,
+                    "max": 500
                 }
             }
 
@@ -1224,6 +1235,22 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                         "minimum": -180,
                         "maximum": 180
                     },
+                    "location": {
+                        "type": "object",
+                        "properties": {
+                            "latitude": {
+                                "$ref": "#/definitions/latitude"
+                            },
+                            "longitude": {
+                                "$ref": "#/definitions/longitude"
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "latitude",
+                            "longitude"
+                        ]
+                    },
                     "place": {
                         "type": "object",
                         "properties": {
@@ -1235,20 +1262,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                                 "pattern": "^[A-Z]$"
                             },
                             "location": {
-                                "type": "object",
-                                "properties": {
-                                    "latitude": {
-                                        "$ref": "#/definitions/latitude"
-                                    },
-                                    "longitude": {
-                                        "$ref": "#/definitions/longitude"
-                                    }
-                                },
-                                "additionalProperties": false,
-                                "required": [
-                                    "latitude",
-                                    "longitude"
-                                ]
+                                "$ref": "#/definitions/location"
                             }
                         },
                         "additionalProperties": false,
@@ -1269,46 +1283,50 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
                             "$ref": "#/definitions/place"
                         }
                     },
-                    "scale": {
+                    "map": {
                         "type": "object",
                         "properties": {
-                            "diameter": {
-                                "type": "number",
-                                "minimum": 0,
-                                "exclusiveMinimum": true
+                            "NW": {
+                                "$ref": "#/definitions/location"
                             },
-                            "center": {
-                                "type": "object",
-                                "properties": {
-                                    "latitude": {
-                                        "$ref": "#/definitions/latitude"
-                                    },
-                                    "longitude": {
-                                        "$ref": "#/definitions/longitude"
-                                    }
-                                },
-                                "additionalProperties": false,
-                                "required": [
-                                    "latitude",
-                                    "longitude"
-                                ]
+                            "SE": {
+                                "$ref": "#/definitions/location"
                             }
                         },
                         "additionalProperties": false,
                         "required": [
-                            "diameter",
-                            "center"
+                            "NW",
+                            "SE"
+                        ]
+                    },
+                    "limits": {
+                        "type": "object",
+                        "properties": {
+                            "min": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "exclusiveMinimum": true
+                            },
+                            "max": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "exclusiveMinimum": true
+                            }
+                        },
+                        "additionalProperties": false,
+                        "required": [
+                            "min",
+                            "max"
                         ]
                     }
                 },
                 "additionalProperties": false,
                 "required": [
                     "places",
-                    "scale"
+                    "map",
+                    "limits"
                 ]
             }
-
-+ Response 204
 
 + Response 400 (application/json)
 
