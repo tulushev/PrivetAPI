@@ -2574,7 +2574,7 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
 
 Уведомления передаваемые сервером, через приложение в модуль, могут идти либо от Apple Push Notification Server либо напрямую
 
-Основное поле, которое нужно передать с уведомлением это поле `appointmentId` в корне уведомления
+Основные поля, которое нужно передать с уведомлением: `appointment`, `target`, `place` в корне уведомления
 
 Например уведомление, в случае передачи через APNS может выглядеть так:
 
@@ -2586,21 +2586,246 @@ HOST: https://dev.api.privetapp.ru/ar/v1/
             "body": "Вы все еще можете видеть друг друга на радаре."
         }
     },
-    "appointmentId": "544b3fd2-06c5-11e5-9762-d634eb8a2689"
+    "appointment": {
+        "appointmentId": "7f76f4d2-06a0-11e5-82a6-01e861ea09be",
+        "status": "made",
+        "userId": "463ec690-069b-11e5-88c0-757bb664a5dc",
+        "placeId": "90e0e65e-069d-11e5-8882-757bb664a5dc"
+    },
+    "target": {
+        "userId": "463ec690-069b-11e5-88c0-757bb664a5dc",
+        "name": "Валерия",
+        "birthday": "1990-05-12T00:00:00.00Z",
+        "status": "invited",
+        "appointmentId": "7f76f4d2-06a0-11e5-82a6-01e861ea09be",
+        "photo": {
+            "preview": "http://preview.jpg",
+            "previewMedium": "http://previewMedium.jpg",
+            "previewLarge": "http://previewLarge.jpg"
+        },
+        "location": {
+            "latitude": 59.842806,
+            "longitude": 30.41288
+        }
+    },
+    "place": {
+        "placeId": "90e0e65e-069d-11e5-8882-757bb664a5dc",
+        "name": "B",
+        "location": {
+            "latitude": 59.80185,
+            "longitude": 30.39274
+        }
+    }
 }
 ```
 
-|                  |                  |                  |                Пример                |    Тип     |Обязательный|               Описание               |
-|------------------|------------------|------------------|:-------------------------------------|------------|:----------:|--------------------------------------|
-|     **aps**      |                  |                  |                                      |  `object`  |   **-**    |          Apple Push Server           |
-|                  |    **alert**     |                  |                                      |  `object`  |   **-**    |     Основной объект уведомления      |
-|                  |                  |     *title*      |"Сабрина отменила встречу."           |  `string`  |   **-**    |         Заголовок сообщения          |
-|                  |                  |      *body*      |"Вы все еще можете видеть друг дру..."|  `string`  |   **-**    |              Сообщение               |
-| *appointmentId*  |                  |                  |"544b3fd2-06c5-11e5-9762-d634eb8a2689"|   `UUID`   |   **+**    |              ID встречи              |
+### Schema
+
+```json
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {
+        "UUID": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+        },
+        "latitude": {
+            "type": "number",
+            "minimum": -90,
+            "maximum": 90
+        },
+        "longitude": {
+            "type": "number",
+            "minimum": -180,
+            "maximum": 180
+        },
+        "location": {
+            "type": "object",
+            "properties": {
+                "latitude": {
+                    "$ref": "#/definitions/latitude"
+                },
+                "longitude": {
+                    "$ref": "#/definitions/longitude"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "latitude",
+                "longitude"
+            ]
+        },
+        "URI": {
+            "type": "string",
+            "format": "uri"
+        }
+    },
+    "type": "object",
+    "properties": {
+        "appointment": {
+            "type": "object",
+            "properties": {
+                "appointmentId": {
+                    "$ref": "#/definitions/UUID"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "made",
+                        "accepted",
+                        "declined",
+                        "timeout",
+                        "kept",
+                        "broken"
+                    ]
+                },
+                "userId": {
+                    "$ref": "#/definitions/UUID"
+                },
+                "placeId": {
+                    "$ref": "#/definitions/UUID"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "appointmentId",
+                "status",
+                "userId",
+                "placeId"
+            ]
+        },
+        "target": {
+            "type": "object",
+            "properties": {
+                "userId": {
+                    "$ref": "#/definitions/UUID"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "birthday": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "normal",
+                        "invited",
+                        "inviter",
+                        "appointment"
+                    ]
+                },
+                "appointmentId": {
+                    "$ref": "#/definitions/UUID"
+                },
+                "photo": {
+                    "type": "object",
+                    "properties": {
+                        "preview": {
+                            "$ref": "#/definitions/URI"
+                        },
+                        "previewMedium": {
+                            "$ref": "#/definitions/URI"
+                        },
+                        "previewLarge": {
+                            "$ref": "#/definitions/URI"
+                        }
+                    },
+                    "additionalProperties": false,
+                    "required": [
+                        "preview"
+                    ]
+                },
+                "location": {
+                    "$ref": "#/definitions/location"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "userId",
+                "name",
+                "status",
+                "photo",
+                "location"
+            ]
+        },
+        "place": {
+            "type": "object",
+            "properties": {
+                "placeId": {
+                    "$ref": "#/definitions/UUID"
+                },
+                "name": {
+                    "type": "string",
+                    "pattern": "^[A-Z]$"
+                },
+                "location": {
+                    "$ref": "#/definitions/location"
+                }
+            },
+            "additionalProperties": false,
+            "required": [
+                "placeId",
+                "name",
+                "location"
+            ]
+        }
+    },
+    "required": [
+        "appointment",
+        "target",
+        "place"
+    ]
+}
+```
+
+### Структура
+
+|                  |                  |                  |                Пример                |    Тип     |Обязательный|                    Описание                       |
+|------------------|------------------|------------------|:-------------------------------------|------------|:----------:|---------------------------------------------------|
+|     **aps**      |                  |                  |                                      |  `object`  |   **-**    |Apple Push Server                                  |
+|                  |    **alert**     |                  |                                      |  `object`  |   **-**    |Основной объект уведомления                        |
+|                  |                  |     *title*      |"Сабрина отменила встречу."           |  `string`  |   **-**    |Заголовок сообщения                                |
+|                  |                  |      *body*      |"Вы все еще можете видеть друг дру..."|  `string`  |   **-**    |Сообщение                                          |
+| **appointment**  |                  |                  |                                      | `[object]` |   **+**    |Объект `appointment`                               |
+|                  | *appointmentId*  |                  |"544b3fd2-06c5-11e5-9762-d634eb8a2689"|   `UUID`   |   **+**    |ID встречи                                         |
+|                  |     *status*     |                  |"made"                                |  `string`  |   **+**    |Статус встречи                                     |
+|                  |                  |      `made`      |                                      |            |            |Приглашение на встречу                             |
+|                  |                  |    `accepted`    |                                      |            |            |Приглашение подтвердили. Встреча                   |
+|                  |                  |    `declined`    |                                      |            |            |Приглашение на встречу отклонили                   |
+|                  |                  |    `timeout`     |                                      |            |            |Приглашение отклонено по таймауту 5 мин.           |
+|                  |                  |      `kept`      |                                      |            |            |«Мы встретились»                                   |
+|                  |                  |     `broken`     |                                      |            |            |От встречи отказались                              |
+|                  |     *userId*     |                  |"7405130e-069b-11e5-8882-757bb664a5dc"|   `UUID`   |   **+**    |ID пользователя                                    |
+|                  |    *placeId*     |                  |"167c6846-06d1-11e5-ae66-babbdd9da696"|   `UUID`   |   **+**    |ID места встречи                                   |
+|   **target**     |                  |                  |                                      |  `object`  |   **+**    |Объект `target`                                    |
+|                  |     *userId*     |                  |"5864aac4-069b-11e5-9941-757bb664a5dc"|   `UUID`   |   **+**    |Идентификатор пользователя                         |
+|                  |      *name*      |                  |"Светлана"                            |  `string`  |   **+**    |Имя пользователя                                   |
+|                  |    *birthday*    |                  |"1986-12-04T00:00:00.00Z"             | `ISO 8601` |   **-**    |День рождения пользователя                         |
+|                  |     *status*     |                  |"appointment"                         |  `string`  |   **+**    |Статус пользователя                                |
+|                  |                  |     `normal`     |                                      |            |            |Обычный пользователь                               |
+|                  |                  |    `invited`     |                                      |            |            |Пользователь которому мы отправили приглашение     |
+|                  |                  |    `inviter`     |                                      |            |            |Пользователь отправивший приглашение нам           |
+|                  |                  |  `appointment`   |                                      |            |            |Пользователь с которым у нас подтвержденная встреча|
+|                  | *appointmentId*  |                  |                                      |   `UUID`   |   **-**    |ID встречи                                         |
+|                  |    **photo**     |                  |                                      |  `object`  |   **+**    |Фото пользователя с разными размерами              |
+|                  |                  |    *preview*     |"photos/UUID/preview.jpg"             |  `string`  |   **+**    |URL квадратного фото размером 120х120              |
+|                  |                  | *previewMedium*  |"photos/UUID/previewMedium.jpg"       |  `string`  |   **-**    |URL квадратного фото размером 180х180              |
+|                  |                  |  *previewLarge*  |"photos/UUID/previewLarge.jpg"        |  `string`  |   **-**    |URL квадратного фото размером 240х240              |
+|                  |   **location**   |                  |                                      |  `object`  |   **+**    |Месторасположение пользователя                     |
+|                  |                  |    *latitude*    |59.852806                             |   `frac`   |   **+**    |Широта                                             |
+|                  |                  |   *longitude*    |30.422884                             |   `frac`   |   **+**    |Долгота                                            |
+|    **place**     |                  |                  |                                      | `[object]` |   **+**    |Массив объектов типа `place`                       |
+|                  |    *placeId*     |                  |"544b3fd2-06c5-11e5-9762-d634eb8a2689"|   `UUID`   |   **+**    |ID места встречи                                   |
+|                  |      *name*      |                  |"A"                                   |  `string`  |   **+**    |Название места встречи                             |
+|                  |   **location**   |                  |                                      |  `object`  |   **+**    |Месторасположение встречи                          |
+|                  |                  |    *latitude*    |59.802800                             |   `frac`   |   **+**    |Широта                                             |
+|                  |                  |   *longitude*    |30.39246                              |   `frac`   |   **+**    |Долгота                                            |
 
 ### Типы уведомлений
 
-Копирайты уведомлений и их соответствие статусам объекта `appointment`:
+Копирайты push уведомлений и их соответствие статусам объекта `appointment`:
 
 |                  |      Статус      |                Заголовок                 |                                         Сообщение                                          |
 |------------------|------------------|:-----------------------------------------|:-------------------------------------------------------------------------------------------|
