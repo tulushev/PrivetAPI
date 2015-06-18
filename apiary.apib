@@ -146,59 +146,6 @@ HOST: https://dev.privetapp.ru/ar/v1/
                 "currentLongitude": 30.42288
             }
 
-    + Schema
-
-            {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "definitions": {
-                    "UUID": {
-                        "type": "string",
-                        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-                    },
-                    "natural": {
-                        "type": "integer",
-                        "minimum": 1
-                    },
-                    "latitude": {
-                        "type": "number",
-                        "minimum": -90,
-                        "maximum": 90
-                    },
-                    "longitude": {
-                        "type": "number",
-                        "minimum": -180,
-                        "maximum": 180
-                    }
-                },
-                "type": "object",
-                "properties": {
-                    "sessionId": {
-                        "$ref": "#/definitions/UUID"
-                    },
-                    "usersInBatch": {
-                        "$ref": "#/definitions/natural"
-                    },
-                    "batches": {
-                        "$ref": "#/definitions/natural"
-                    },
-                    "currentLatitude": {
-                        "$ref": "#/definitions/latitude"
-                    },
-                    "currentLongitude": {
-                        "$ref": "#/definitions/longitude"
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "sessionId",
-                    "usersInBatch",
-                    "batches",
-                    "currentLatitude",
-                    "currentLongitude"
-                ]
-            }
-
-
 + Response 200 (application/json)
 
     + Body
@@ -704,28 +651,6 @@ HOST: https://dev.privetapp.ru/ar/v1/
                 "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b"
             }
 
-    + Schema
-
-            {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "definitions": {
-                    "UUID": {
-                        "type": "string",
-                        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-                    }
-                },
-                "type": "object",
-                "properties": {
-                    "sessionId": {
-                        "$ref": "#/definitions/UUID"
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "sessionId"
-                ]
-            }
-
 + Response 200 (application/json)
 
     + Body
@@ -989,28 +914,6 @@ HOST: https://dev.privetapp.ru/ar/v1/
 
             {
                 "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b"
-            }
-
-    + Schema
-
-            {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "definitions": {
-                    "UUID": {
-                        "type": "string",
-                        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-                    }
-                },
-                "type": "object",
-                "properties": {
-                    "sessionId": {
-                        "$ref": "#/definitions/UUID"
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "sessionId"
-                ]
             }
 
 + Response 200 (application/json)
@@ -1310,28 +1213,6 @@ HOST: https://dev.privetapp.ru/ar/v1/
                 "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b"
             }
 
-    + Schema
-
-            {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "definitions": {
-                    "UUID": {
-                        "type": "string",
-                        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-                    }
-                },
-                "type": "object",
-                "properties": {
-                    "sessionId": {
-                        "$ref": "#/definitions/UUID"
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "sessionId"
-                ]
-            }
-
 + Response 200 (application/json)
 
     + Body
@@ -1556,36 +1437,6 @@ HOST: https://dev.privetapp.ru/ar/v1/
                 "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b",
                 "userId": "463ec690-069b-11e5-88c0-757bb664a5dc",
                 "placeId": "90e0e65e-069d-11e5-8882-757bb664a5dc"
-            }
-
-    + Schema
-
-            {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "definitions": {
-                    "UUID": {
-                        "type": "string",
-                        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-                    }
-                },
-                "type": "object",
-                "properties": {
-                    "sessionId": {
-                        "$ref": "#/definitions/UUID"
-                    },
-                    "userId": {
-                        "$ref": "#/definitions/UUID"
-                    },
-                    "placeId": {
-                        "$ref": "#/definitions/UUID"
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "sessionId",
-                    "userId",
-                    "placeId"
-                ]
             }
 
 + Response 201 (application/json)
@@ -1856,28 +1707,6 @@ HOST: https://dev.privetapp.ru/ar/v1/
                 "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b"
             }
 
-    + Schema
-
-            {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "definitions": {
-                    "UUID": {
-                        "type": "string",
-                        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-                    }
-                },
-                "type": "object",
-                "properties": {
-                    "sessionId": {
-                        "$ref": "#/definitions/UUID"
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "sessionId"
-                ]
-            }
-
 + Response 200 (application/json)
 
     + Body
@@ -2086,36 +1915,6 @@ HOST: https://dev.privetapp.ru/ar/v1/
             {
                 "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b",
                 "status": "accepted"
-            }
-
-    + Schema
-
-            {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "definitions": {
-                    "UUID": {
-                        "type": "string",
-                        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-                    }
-                },
-                "type": "object",
-                "properties": {
-                    "sessionId": {
-                        "$ref": "#/definitions/UUID"
-                    },
-                    "status": {
-                        "type": "string",
-                        "enum": [
-                            "accepted",
-                            "kept"
-                        ]
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "sessionId",
-                    "status"
-                ]
             }
 
 + Response 200 (application/json)
@@ -2400,28 +2199,6 @@ HOST: https://dev.privetapp.ru/ar/v1/
 
             {
                 "sessionId": "653527d9-d4e8-43d7-a8c1-5b28c04ad17b"
-            }
-
-    + Schema
-
-            {
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "definitions": {
-                    "UUID": {
-                        "type": "string",
-                        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-                    }
-                },
-                "type": "object",
-                "properties": {
-                    "sessionId": {
-                        "$ref": "#/definitions/UUID"
-                    }
-                },
-                "additionalProperties": false,
-                "required": [
-                    "sessionId"
-                ]
             }
 
 + Response 204
